@@ -7,7 +7,7 @@ function App() {
     const [currentItem, setCurrentItem]=useState<{_id?:string; todo?:string; status?: boolean;}>({})
     useEffect(() => {
         const getData = async () => {
-            const todoResponse = await fetch('http://localhost:8000/todo/todos', {
+            const todoResponse = await fetch('https://todo-mfe-be.onrender.com/todo/todos', {
                 credentials: 'include',
                 method: 'GET'
             })
@@ -18,7 +18,7 @@ function App() {
         getData();
     }, [])
     const handleAdd = async () => {
-        const addTodo = await fetch("http://localhost:8000/todo/todos", {
+        const addTodo = await fetch("https://todo-mfe-be.onrender.com/todo/todos", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -38,7 +38,7 @@ function App() {
     const handleEdit = async (id?: string, status: boolean = false, todo: string = "") => {
         if (!id) return;
 
-        const res = await fetch(`http://localhost:8000/todo/todos/${id}`, {
+        const res = await fetch(`https://todo-mfe-be.onrender.com/todo/todos/${id}`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -60,7 +60,7 @@ function App() {
         setCurrentItem(item)
     }
     const handleDelete = async(id: string)=>{
-        const res = await fetch(`http://localhost:8000/todo/todos/${id}`, {
+        const res = await fetch(`https://todo-mfe-be.onrender.com/todo/todos/${id}`, {
             method: "DELETE",
             credentials: "include",
             headers: {
