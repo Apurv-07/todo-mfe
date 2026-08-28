@@ -93,7 +93,7 @@ function App() {
   }
 
   return (
-      <div className="min-h-screen w-full bg-slate-950 text-slate-100 p-6 sm:p-12 relative overflow-x-hidden font-sans">
+      <div className="h-full w-full bg-slate-950 text-slate-100 p-6 sm:p-12 relative overflow-x-hidden font-sans">
           
           {/* Background Aurora Glow Orbs */}
           <div className="absolute top-10 left-10 w-[500px] h-[500px] bg-cyan-500/15 rounded-full blur-[120px] pointer-events-none animate-pulse" />
