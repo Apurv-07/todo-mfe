@@ -1,0 +1,12 @@
+/* Global resets for STANDALONE mode only.
+   Imported by main.tsx, NOT by the federated App export, so these
+   rules never leak into the host document when consumed as a remote. */
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
