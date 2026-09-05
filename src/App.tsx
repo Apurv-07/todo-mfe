@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import toast, { Toaster } from "react-hot-toast";
 import "./index.css";
 import {
   ListTodo,
@@ -20,22 +22,42 @@ type Todo = {
   status?: boolean;
 };
 
-type Toast = { id: number; message: string; tone: "success" | "error" };
+const notify = (message: string, tone: "success" | "error" = "success") => {
+  if (tone === "error") {
+    toast.error(message);
+  } else {
+    toast.success(message);
+  }
+};
+
+/**
+ * When this MFE renders inside the host shell, the host wraps remotes in
+ * `<main class="relative z-0">`, which creates a new stacking context. A
+ * Toaster rendered inline here is trapped inside that context and ends up
+ * behind the host navbar (z-50) no matter how high its own z-index is.
+ *
+ * Portaling the Toaster to document.body lifts it out of that stacking
+ * context so a high z-index actually wins. It's a no-op in standalone mode.
+ */
+function PortalToaster() {
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <Toaster
+      position="top-right"
+      reverseOrder={false}
+      containerStyle={{ zIndex: 2147483647 }}
+      toastOptions={{ style: { zIndex: 2147483647 } }}
+    />,
+    document.body,
+  );
+}
 
 function App() {
   const [todoItem, setTodoItem] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentItem, setCurrentItem] = useState<Todo>({});
   const [adding, setAdding] = useState(false);
-  const [toasts, setToasts] = useState<Toast[]>([]);
-
-  const notify = (message: string, tone: "success" | "error" = "success") => {
-    const id = Date.now() + Math.random();
-    setToasts((prev) => [...prev, { id, message, tone }]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 2600);
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -159,26 +181,8 @@ function App() {
         style={{ animationDuration: "4s" }}
       />
 
-      {/* Toasts */}
-      <div className="fixed top-4 right-4 left-4 sm:left-auto z-50 flex flex-col gap-2 sm:max-w-xs items-end">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`flex items-center gap-2 px-4 py-3 rounded-xl border backdrop-blur-xl shadow-2xl text-sm font-medium animate-[fadeIn_0.2s_ease-out] ${
-              t.tone === "success"
-                ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-200"
-                : "bg-rose-500/15 border-rose-500/30 text-rose-200"
-            }`}
-          >
-            {t.tone === "success" ? (
-              <CheckCircle2 className="w-4 h-4" />
-            ) : (
-              <X className="w-4 h-4" />
-            )}
-            <span>{t.message}</span>
-          </div>
-        ))}
-      </div>
+      {/* Toasts (react-hot-toast, portaled above host navbar) */}
+      <PortalToaster />
 
       {/* Main Wrapper */}
       <div className="max-w-3xl mx-auto space-y-6 relative z-10">
