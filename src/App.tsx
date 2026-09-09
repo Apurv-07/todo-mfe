@@ -269,15 +269,15 @@ function App() {
               return (
                 <div
                   key={item._id}
-                  className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 backdrop-blur-xl shadow-lg flex items-center justify-between gap-4 group ${
+                  className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 backdrop-blur-xl shadow-lg flex items-start justify-between gap-4 group ${
                     item.status
                       ? "border-emerald-500/25 bg-emerald-950/20"
                       : "border-white/10 bg-slate-900/80 hover:border-cyan-500/30 hover:bg-slate-900"
                   }`}
                 >
                   {/* Left: Checkbox + Text / Editable Input */}
-                  <div className="flex items-center space-x-4 flex-1 min-w-0">
-                    <label className="relative flex items-center justify-center cursor-pointer shrink-0">
+                  <div className="flex items-start space-x-4 flex-1 min-w-0">
+                    <label className="relative flex items-center justify-center cursor-pointer shrink-0 mt-0.5">
                       <input
                         type="checkbox"
                         checked={!!item.status}
@@ -291,12 +291,12 @@ function App() {
                       </div>
                     </label>
 
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 py-0.5">
                       {!isEditing ? (
                         <span
-                          className={`block text-sm sm:text-base font-medium truncate transition-colors ${
+                          className={`block text-sm sm:text-base font-medium leading-relaxed break-words whitespace-pre-wrap transition-colors ${
                             item.status
-                              ? "text-slate-500 line-through"
+                              ? "text-slate-500 line-through decoration-slate-600"
                               : "text-slate-100"
                           }`}
                         >
